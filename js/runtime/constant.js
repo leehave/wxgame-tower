@@ -40,3 +40,5 @@ export const hookUpMovement = 'HOOK_UP_MOVEMENT'
 export const lightningMovement = 'LIGHTNING_MOVEMENT'
 export const tutorialMovement = 'TUTORIAL_MOVEMENT'
 export const moveDownMovement = 'MOVE_DOWN_MOVEMENT'
+
+export const homeIndexStart = 'HOME_INDEX_START'
