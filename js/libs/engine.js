@@ -2,14 +2,12 @@ import * as utils from '../util/util'
 import Tween from '../util/tween'
 
 const { isFunction, isTouchDevice } = utils
-console.log(utils, 'utils')
 const res = wx.getSystemInfoSync()
 export default class Engine {
   constructor(option = {}) {
     const {
       canvas, width, height, highResolution, loadLimit, soundOn
     } = option
-    console.log(option, 'instence option')
     let canvasWidth = width || res.windowWidth
     let canvasHeight = height || res.windowHeight
     this.highResolution = highResolution
@@ -60,7 +58,6 @@ export default class Engine {
     this.keyPressListeners = {}
     // hooks
     this.startAnimate = () => {
-			console.log(this)
     }
     this.paintUnderInstance = () => {
 			console.log('bind background.js')
@@ -105,52 +102,19 @@ export default class Engine {
 
   addAudio(name, src, retry = 0) {
     // if (!this.soundOn) return
-    // if (!retry) this.assetsCount.audio += 1
-    // let a = wx.createInnerAudioContext()
-    // a.autoplay = false
-    // a.loop = false
-    // a.src = src
-    let that = this
-    let fs = wx.getFileSystemManager()
-    fs.readFile({
-      filePath: src,
-      success(res) {
-        console.log(res.data, 'addAudio')
-        const audioCtx = wx.createWebAudioContext()
-        audioCtx.decodeAudioData(
-          res.data,
-          (buffer) => {
-            console.log(buffer)
-            var pcmArr = buffer.getChannelData(0)
-            var max = 0.0
-            for (var i = 0; i < pcmArr.length; i++) {
-              if (pcmArr.indexOf(i) * 1000 > max) {
-                max = pcmArr.indexOf(i) * 1000
-              }
-            }
-            if (max > 0.3) {
-              that.assetsObj.audio[name] = audioCtx
-              console.log('吹了')
-            } else {
-              console.log('没吹')
-            }
-          },
-          (err) => {
-            console.error('decodeAudioData fail', err)
-            wx.onError((e) => {
-              that.assetsErrorQueue.push({
-                name,
-                src,
-                retry: retry + 1,
-                type: 'audio',
-              })
-            })
-          }
-        )
-      },
-      fail(res) {
-        console.error(res)
-      },
+    if (!retry) this.assetsCount.audio += 1
+    let a = wx.createInnerAudioContext()
+    a.autoplay = false
+    a.loop = false
+    a.src = src
+    this.assetsObj.audio[name] = src
+    wx.onError((e) => {
+      this.assetsErrorQueue.push({
+        name,
+        src,
+        retry: retry + 1,
+        type: 'audio',
+      })
     })
     // a.load()
   }
@@ -536,7 +500,6 @@ export default class Engine {
         //   total: assetsTotalCount
         // })
       // }
-      console.log(assetsTotalCount, assetsLoadedCount, 'assetsTotalCount, assetsLoadedCount')
       if (this.assetsErrorQueue.length > 0) {
         this.assetsErrorQueue.forEach((i) => {
           const {
@@ -566,7 +529,6 @@ export default class Engine {
 
   init() {
     const self = this
-    console.log('start init')
     requestAnimationFrame(() => {
       this.animate.call(self, 300)
     })

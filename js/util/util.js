@@ -177,7 +177,7 @@ export const drawYellowString = (engine, option) => {
   ctx.fillText(string, x, y)
   ctx.restore()
 }
-
+const performance = wx.getPerformance()
 export const getCurrentTime = () => (performance.now())
 
 export const random = (min, max) => (Math.random() * (max - min)) + min

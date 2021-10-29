@@ -26,7 +26,7 @@ export const cloudAction = (instance, engine) => {
     const position = positionArr[instance.index - 1]
     instance.x = engine.utils.random(position.x, (position.x * 1.2))
     instance.originX = instance.x
-    instance.ax = engine.pixelsPerFrame(instance.width * engine.utils.random(0.05, 0.08)
+    instance.ax = engine.pixelsPerFrame(instance.width * engine.utils.random(0.25, 0.28)
       * engine.utils.randomPositiveNegative())
     instance.y = engine.utils.random(position.y, (position.y * 1.2))
   }

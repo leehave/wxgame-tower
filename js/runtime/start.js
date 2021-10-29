@@ -5,6 +5,7 @@ import { background } from './background'
 import { lineAction, linePainter } from './line'
 import { cloudAction, cloudPainter } from './cloud'
 import { hookAction, hookPainter } from './hooks'
+import { homeStartAction, homeStartPainter,homeTopTitleAction,homeTopTitlePainter } from './homeStart'
 import { tutorialAction, tutorialPainter } from './tutorial'
 import * as constant from './constant'
 import { startAnimate, endAnimate } from './animateFunc'
@@ -29,6 +30,7 @@ export const TowerGame = (option = {}) => {
 	game.addImg('blockRope', pathGenerator('images','block-rope.png'))
 	game.addImg('block', pathGenerator('images','block.png'))
 	game.addImg('block-perfect', pathGenerator('images','block-perfect.png'))
+	game.addImg('homeStart', pathGenerator('images','main-index-start.png'))
 	for (let i = 1; i <= 8; i += 1) {
 		game.addImg(`c${i}`, pathGenerator('images',`c${i}.png`))
 	}
@@ -41,6 +43,7 @@ export const TowerGame = (option = {}) => {
 	game.addImg('tutorial-arrow', pathGenerator('images','tutorial-arrow.png'))
 	game.addImg('heart', pathGenerator('images','heart.png'))
 	game.addImg('score', pathGenerator('images','score.png'))
+	game.addImg('main-index-title', pathGenerator('images', 'main-index-title.png'))
 	game.addAudio('drop-perfect', pathGenerator('audio','drop-perfect.mp3'))
 	// game.addAudio('drop', pathGenerator('audio','drop.mp3'))
 	// game.addAudio('game-over', pathGenerator('audio','game-over.mp3'))
@@ -56,6 +59,8 @@ export const TowerGame = (option = {}) => {
 	game.setVariable(constant.gameScore, 0)
 	game.setVariable(constant.hardMode, false)
 	game.setVariable(constant.gameUserOption, option)
+	game.setVariable(constant.homeIndexStart, game.width * 0.4)
+	game.setVariable(constant.homeTopTitle, 0)
 	for (let i = 1; i <= 4; i += 1) {
 		const cloud = new Instance({
 			name: `cloud_${i}`,
@@ -78,10 +83,21 @@ export const TowerGame = (option = {}) => {
 		painter: hookPainter
 	})
 	game.addInstance(hook)
-
 	game.startAnimate = startAnimate
 	game.endAnimate = endAnimate
 	game.paintUnderInstance = background
+	const start = new Instance({
+		name: 'homeStart',
+		action: homeStartAction,
+		painter: homeStartPainter
+	})
+	game.addInstance(start)
+	const title = new Instance({
+		name: 'homeTop',
+		action: homeTopTitleAction,
+		painter: homeTopTitlePainter
+	})
+	game.addInstance(title)
 	// game.addKeyDownListener('enter', () => {
 	// 	if (game.debug) game.togglePaused()
 	// })
