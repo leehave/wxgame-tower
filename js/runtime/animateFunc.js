@@ -1,11 +1,11 @@
-import { Instance } from '../libs/instance'
+import Instance from '../libs/instance'
 import { blockAction, blockPainter } from './block'
 import {
   checkMoveDown,
   getMoveDownValue,
   drawYellowString,
   getAngleBase
-} from './utils'
+} from '../util/util'
 import { addFlight } from './flight'
 import * as constant from './constant'
 

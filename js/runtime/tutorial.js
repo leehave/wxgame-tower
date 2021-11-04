@@ -1,4 +1,4 @@
-import { getHookStatus } from './utils'
+import { getHookStatus } from '../util/util'
 import * as constant from './constant'
 
 export const tutorialAction = (instance, engine, time) => {

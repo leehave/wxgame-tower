@@ -1,4 +1,4 @@
-import { getSwingBlockVelocity } from './utils'
+import { getSwingBlockVelocity } from '../util/util'
 import * as constant from './constant'
 
 export const hookAction = (instance, engine, time) => {

@@ -68,24 +68,27 @@ export default class Engine {
     }
     this.touchStartListener = () => {
     }
-    this.touchEndListener = () => {
+    this.touchEndListener = (e) => {
     }
     this.touchMoveListener = () => {
     }
     // global event listener
 
     wx.onTouchStart(e => {
-      self.touchStartListener(e)
+      this.touchStartListener(e)
     })
     wx.onTouchMove(e => {
-      self.touchMoveListener(e)
+      this.touchMoveListener(e)
     })
     wx.onTouchEnd(e => {
-      self.touchEndListener(e)
+      // this.touchEndListener(e)
+      console.log(e, 'touch')
+      this.triggerReaction(e.changedTouches[0].pageX, e.changedTouches[0].pageY)
     })
   }
 
   triggerReaction(x, y) {
+    console.log(x,y,'triggerReaction')
     let calX = x
     let calY = y
     if (this.highResolution) {
@@ -201,8 +204,8 @@ export default class Engine {
     this.tickTimeMovement()
     // this.debug && this.showFps()
     // this.debug && this.drawDebug()
-    requestAnimationFrame(() => {
-      this.animate.call(self, 300)
+    requestAnimationFrame((_time) => {
+      this.animate.call(self, _time)
     })
   }
 
@@ -528,9 +531,8 @@ export default class Engine {
   }
 
   init() {
-    const self = this
-    requestAnimationFrame(() => {
-      this.animate.call(self, 300)
+    requestAnimationFrame((_time) => {
+      this.animate(_time)
     })
   }
 }

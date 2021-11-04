@@ -1,11 +1,11 @@
 import Engine from '../libs/engine.js'
 import Instance from '../libs/instance.js'
-import { touchEventHandler } from './utils'
+import { touchEventHandler } from '../util/util'
 import { background } from './background'
 import { lineAction, linePainter } from './line'
 import { cloudAction, cloudPainter } from './cloud'
 import { hookAction, hookPainter } from './hooks'
-import { homeStartAction, homeStartPainter,homeTopTitleAction,homeTopTitlePainter } from './homeStart'
+import { homeStartAction, homeStartPainter,homeTopTitleAction,homeTopTitlePainter, homeStartTrigger } from './homeStart'
 import { tutorialAction, tutorialPainter } from './tutorial'
 import * as constant from './constant'
 import { startAnimate, endAnimate } from './animateFunc'
@@ -44,7 +44,7 @@ export const TowerGame = (option = {}) => {
 	game.addImg('heart', pathGenerator('images','heart.png'))
 	game.addImg('score', pathGenerator('images','score.png'))
 	game.addImg('main-index-title', pathGenerator('images', 'main-index-title.png'))
-	game.addAudio('drop-perfect', pathGenerator('audio','drop-perfect.mp3'))
+	// game.addAudio('drop-perfect', pathGenerator('audio','drop-perfect.mp3'))
 	// game.addAudio('drop', pathGenerator('audio','drop.mp3'))
 	// game.addAudio('game-over', pathGenerator('audio','game-over.mp3'))
 	// game.addAudio('rotate', pathGenerator('audio','rotate.mp3'))
@@ -89,7 +89,8 @@ export const TowerGame = (option = {}) => {
 	const start = new Instance({
 		name: 'homeStart',
 		action: homeStartAction,
-		painter: homeStartPainter
+		painter: homeStartPainter,
+		trigger: homeStartTrigger
 	})
 	game.addInstance(start)
 	const title = new Instance({

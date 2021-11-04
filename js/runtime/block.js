@@ -6,7 +6,7 @@ import {
   addSuccessCount,
   addFailedCount,
   addScore
-} from './utils'
+} from '../util/util'
 import * as constant from './constant'
 
 const checkCollision = (block, line) => {
@@ -105,7 +105,7 @@ export const blockAction = (instance, engine, time) => {
         ins.originOutwardAngle = Math.atan(ins.height / ins.outwardOffset)
         ins.originHypotenuse = Math.sqrt((ins.height ** 2)
           + (ins.outwardOffset ** 2))
-        engine.playAudio('rotate')
+        // engine.playAudio('rotate')
       }
       switch (collision) {
         case 1:
@@ -145,10 +145,10 @@ export const blockAction = (instance, engine, time) => {
           if (collision === 5) {
             instance.perfect = true
             addScore(engine, true)
-            engine.playAudio('drop-perfect')
+            // engine.playAudio('drop-perfect')
           } else {
             addScore(engine)
-            engine.playAudio('drop')
+            // engine.playAudio('drop')
           }
           break
         default:

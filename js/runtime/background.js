@@ -1,4 +1,4 @@
-import { checkMoveDown, getMoveDownValue } from './utils'
+import { checkMoveDown, getMoveDownValue } from '../util/util'
 import * as constant from './constant'
 
 export const backgroundImg = (engine) => {

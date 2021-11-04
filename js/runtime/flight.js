@@ -1,4 +1,4 @@
-import { Instance } from '../libs/instance'
+import Instance from '../libs/instance'
 import * as constant from './constant'
 
 const getActionConfig = (engine, type) => {

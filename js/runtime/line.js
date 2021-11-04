@@ -1,4 +1,4 @@
-import { getMoveDownValue, getLandBlockVelocity } from './utils'
+import { getMoveDownValue, getLandBlockVelocity } from '../util/util'
 import * as constant from './constant'
 
 export const lineAction = (instance, engine, time) => {
