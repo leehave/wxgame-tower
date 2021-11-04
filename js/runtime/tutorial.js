@@ -32,4 +32,3 @@ export const tutorialPainter = (instance, engine) => {
   const t = engine.getImg(name)
   ctx.drawImage(t, instance.x, instance.y, instance.width, instance.height)
 }
-
