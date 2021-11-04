@@ -6,18 +6,14 @@ import {
   getCurrentTime
 } from '../util/util'
 export const homeStartTrigger = (instance, engine) => {
-  const homeIndexHeight = engine.getVariable(constant.homeIndexStart)
-  const homeIndex = engine.getImg('homeStart')
-  console.log(homeIndex, 'getimghomstart')
-  const homeIndexWidth = homeIndex.width
-  engine.triggerReaction(homeIndexWidth * 0.5, homeIndexHeight * 0.5)
+  console.log('testssgjhdsjvbjf')
   engine.setVariable(constant.gameStartNow, true)
 }
 export const homeStartAction = (instance, engine, time = 1000) => {
   const homeIndexHeight = engine.getVariable(constant.homeIndexStart)
   if (!instance.ready) {
     instance.x = engine.width / 2
-    instance.y = homeIndexHeight * -1.5
+    instance.y = engine.ctx.canvas.height - homeIndexHeight + 20
     instance.ready = true
   }
   
@@ -45,11 +41,17 @@ export const homeStartPainter = (instance, engine) => {
   const homeIndexHeight = engine.getVariable(constant.homeIndexStart)
   const homeIndex = engine.getImg('homeStart')
   const homeIndexWidth = homeIndex.width
-  ctx.drawImage(homeIndex, instance.x - (homeIndexWidth * 0.5 / 2), ctx.canvas.height - homeIndexHeight + 20, homeIndexWidth * 0.5, homeIndexHeight * 0.5)
+  instance.width = homeIndex.width
+  instance.height = homeIndexHeight
+  ctx.drawImage(homeIndex, instance.x - (homeIndexWidth * 0.5 / 2), ctx.canvas.height - homeIndex.height + 20, homeIndex.width * 0.5, homeIndex.height * 0.5)
   ctx.restore()
 }
 // 顶部title
 export const homeTopTitleAction = (instance, engine) => {
+  const homeIndexHeight = engine.getVariable(constant.homeTopTitle)
+  instance.x = engine.width / 2
+  instance.y = homeIndexHeight * -1.5
+  instance.ready = true
   const start = engine.getVariable(constant.gameStartNow)
   if(!start) return
   instance.visible = false

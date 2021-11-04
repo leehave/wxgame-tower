@@ -88,16 +88,18 @@ export default class Engine {
   }
 
   triggerReaction(x, y) {
-    console.log(x,y,'triggerReaction')
     let calX = x
     let calY = y
     if (this.highResolution) {
       calX *= 2
-      calY *= 2
+      // calY *= 2
     }
     this.instancesReactionArr.forEach((i) => {
       if (!i.visible) return
+      console.log(calX,'calX',i.x,'i.x',i.width,'i.width',calY,'calY',i.y,'i.y',i.height,'i.height')
+      console.log(calX >= i.x,'calX >= i.x',calX <= i.x + i.width,'calX <= i.x + i.width',calY >= i.y,'calY >= i.y',calY <= i.y + i.height,'calY <= i.y + i.height')
       if (calX >= i.x && calX <= i.x + i.width && calY >= i.y && calY <= i.y + i.height) {
+        console.log('ccjdc')
         i.trigger(i, this)
       }
     })
