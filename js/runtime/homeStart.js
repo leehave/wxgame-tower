@@ -1,6 +1,7 @@
 import * as constant from './constant'
 import {
-  getSwingBlockVelocity
+  getSwingBlockVelocity,
+  drawYellowString
 } from '../util/util'
 import {
   getCurrentTime
@@ -15,11 +16,12 @@ export const gameEndPainter = (instance, engine) => {
   const gameEndTag = engine.getVariable(constant.gameEnd)
   if (!gameEndTag) return
   const gameEndBg = engine.getImg('endBg')
+  const gameScore = engine.getImg('modal-over')
   const { ctx } = engine
   ctx.rect(0,0,engine.width, engine.height)
-  ctx.fillRect(0,0,engine.width,engine.height)
   ctx.fillStyle = 'RGBA(0,0,0,.5)'
-  ctx.save()
+  ctx.fillRect(0,0,engine.width,engine.height)
+  ctx.restore()
   ctx.drawImage(
     gameEndBg,
     (engine.width - gameEndBg.width * 0.5)/2,
@@ -27,6 +29,24 @@ export const gameEndPainter = (instance, engine) => {
     gameEndBg.width * 0.5,
     gameEndBg.height * 0.5
   )
+  ctx.save()
+  ctx.drawImage(gameScore, (engine.width - gameScore.width * 0.5)/2,
+  gameScore.height * 0.5,
+  gameScore.width * 0.5,
+  gameScore.height * 0.5)
+  drawYellowString(engine, {
+    string: '100',
+    size: 36,
+    x: (engine.width - gameScore.width * 0.5) / 2 + 36,
+    y: (engine.height - gameEndBg.height * 0.5) + gameScore.height * 0.5
+  })
+  const font = 'Microsoft Yahei'
+  ctx.fillStyle = '#ff0000'
+  ctx.strokeStyle = '#ff0000'
+  ctx.textAlign = 'center'
+  ctx.font = `18px ${font}`
+  ctx.fillText('再来一次', (gameEndBg.width * 0.5 - gameScore.width * 0.5) / 2, (engine.height - gameEndBg.height * 0.5) + gameScore.height * 0.5 + 14)
+  
   ctx.restore()
 }
 
@@ -73,6 +93,19 @@ export const homeTopTitleAction = (instance, engine) => {
   instance.x = engine.width / 2
   instance.y = homeIndexHeight * -1.5
   instance.ready = true
+  engine.getTimeMovement(
+    constant.homeTopTitle,
+    [
+      [instance.y, instance.y - homeIndexHeight]
+    ],
+    (value) => {
+      instance.y = value
+    }, {
+      after: () => {
+        instance.y = homeIndexHeight * -1.5
+      }
+    }
+  )
   const start = engine.getVariable(constant.gameStartNow)
   if(!start) return
   instance.visible = false
