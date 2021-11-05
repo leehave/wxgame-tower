@@ -5,7 +5,15 @@ import { background } from './background'
 import { lineAction, linePainter } from './line'
 import { cloudAction, cloudPainter } from './cloud'
 import { hookAction, hookPainter } from './hooks'
-import { homeStartAction, homeStartPainter,homeTopTitleAction,homeTopTitlePainter, homeStartTrigger } from './homeStart'
+import { 
+	homeStartAction, 
+	homeStartPainter,
+	homeTopTitleAction,
+	homeTopTitlePainter, 
+	homeStartTrigger,
+	gameEndPainter,
+	gameEndAction
+} from './homeStart'
 import { tutorialAction, tutorialPainter } from './tutorial'
 import * as constant from './constant'
 import { startAnimate, endAnimate } from './animateFunc'
@@ -31,6 +39,9 @@ export const TowerGame = (option = {}) => {
 	game.addImg('block', pathGenerator('images','block.png'))
 	game.addImg('block-perfect', pathGenerator('images','block-perfect.png'))
 	game.addImg('homeStart', pathGenerator('images','main-index-start.png'))
+	game.addImg('endBg', pathGenerator('images','main-modal-bg.png'))
+	game.addImg('restart', pathGenerator('images','main-modal-again-b.png'))
+	game.addImg('modal-over', pathGenerator('images','main-modal-over.png'))
 	for (let i = 1; i <= 8; i += 1) {
 		game.addImg(`c${i}`, pathGenerator('images',`c${i}.png`))
 	}
@@ -44,11 +55,6 @@ export const TowerGame = (option = {}) => {
 	game.addImg('heart', pathGenerator('images','heart.png'))
 	game.addImg('score', pathGenerator('images','score.png'))
 	game.addImg('main-index-title', pathGenerator('images', 'main-index-title.png'))
-	// game.addAudio('drop-perfect', pathGenerator('audio','drop-perfect.mp3'))
-	// game.addAudio('drop', pathGenerator('audio','drop.mp3'))
-	// game.addAudio('game-over', pathGenerator('audio','game-over.mp3'))
-	// game.addAudio('rotate', pathGenerator('audio','rotate.mp3'))
-	// game.addAudio('bgm', pathGenerator('audio','bgm.mp3'))
 	game.setVariable(constant.blockWidth, game.width * 0.25)
 	game.setVariable(constant.blockHeight, game.getVariable(constant.blockWidth) * 0.71)
 	game.setVariable(constant.cloudSize, game.width * 0.3)
@@ -60,7 +66,8 @@ export const TowerGame = (option = {}) => {
 	game.setVariable(constant.hardMode, false)
 	game.setVariable(constant.gameUserOption, option)
 	game.setVariable(constant.homeIndexStart, game.width * 0.4)
-	game.setVariable(constant.homeTopTitle, 0)
+	game.setVariable(constant.homeTopTitle, game.width * 0.4)
+	game.setVariable(constant.gameEndPic, game.width * 0.5)
 	for (let i = 1; i <= 4; i += 1) {
 		const cloud = new Instance({
 			name: `cloud_${i}`,
@@ -99,21 +106,20 @@ export const TowerGame = (option = {}) => {
 		painter: homeTopTitlePainter
 	})
 	game.addInstance(title)
-	// game.addKeyDownListener('enter', () => {
-	// 	if (game.debug) game.togglePaused()
-	// })
+
+	
 	game.touchStartListener = () => {
 		touchEventHandler(game)
 	}
-
-	// game.playBgm = () => {
-	// 	game.playAudio('bgm', true)
-	// }
-
-	// game.pauseBgm = () => {
-	// 	game.pauseAudio('bgm')
-	// }
-
+	game.setVariable(constant.gameEnd, false)
+	game.stop = () => {
+		const gameEnd = new Instance({
+			name: 'gameEnd',
+			action: gameEndAction,
+			painter: gameEndPainter
+		})
+		game.addInstance(gameEnd)
+	},
 	game.start = () => {
 		const tutorial = new Instance({
 			name: 'tutorial',
@@ -127,8 +133,8 @@ export const TowerGame = (option = {}) => {
 			painter: tutorialPainter
 		})
 		game.addInstance(tutorialArrow)
-		game.setTimeMovement(constant.bgInitMovement, 500)
-		game.setTimeMovement(constant.tutorialMovement, 500)
+		game.setTimeMovement(constant.bgInitMovement, 800)
+		game.setTimeMovement(constant.tutorialMovement, 300)
 		game.setVariable(constant.gameStartNow, true)
 	}
   return game

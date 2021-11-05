@@ -2,6 +2,8 @@ import * as constant from '../runtime/constant'
 const res = wx.getSystemInfoSync()
 const screenWidth = res.windowWidth
 const screenHeight = res.windowHeight
+console.log(res, 'res.platform')
+const plarform = res.platform
 export const checkMoveDown = engine =>
   (engine.checkTimeMovement(constant.moveDownMovement))
 
@@ -114,7 +116,7 @@ export const touchEventHandler = (engine) => {
   engine.removeInstance('tutorial-arrow')
   const b = engine.getInstance(`block_${engine.getVariable(constant.blockCount)}`)
   if (b && b.status === constant.swing) {
-    engine.setTimeMovement(constant.hookUpMovement, 500)
+    engine.setTimeMovement(constant.hookUpMovement, 800)
     b.status = constant.beforeDrop
   }
 }
@@ -138,9 +140,10 @@ export const addFailedCount = (engine) => {
   engine.setVariable(constant.perfectCount, 0)
   if (setGameFailed) setGameFailed(failed)
   if (failed >= 3) {
-    engine.pauseAudio('bgm')
-    engine.playAudio('game-over')
     engine.setVariable(constant.gameStartNow, false)
+    //结束时显示分数和重新开始的bg
+    engine.setVariable(constant.gameEnd, true)
+    engine.stop()
   }
 }
 
@@ -159,10 +162,11 @@ export const drawYellowString = (engine, option) => {
   const {
     string, size, x, y, textAlign
   } = option
+  const font = plarform == 'devtools' ? 'Microsoft Yahei' : wx.loadFont('/fonts/wenxue.ttf')
   const { ctx } = engine
-  const fontName = 'wenxue'
+  const fontName = `${font}`
   const fontSize = size
-  const lineSize = fontSize * 0.1
+  const lineSize = plarform == 'devtools' ? fontSize * 0.2 : fontSize * 0.1
   ctx.save()
   ctx.beginPath()
   const gradient = ctx.createLinearGradient(0, 0, 0, y)
@@ -172,7 +176,7 @@ export const drawYellowString = (engine, option) => {
   ctx.lineWidth = lineSize
   ctx.strokeStyle = '#FFF'
   ctx.textAlign = textAlign || 'center'
-  ctx.font = `${fontSize}px ${fontName}`
+  ctx.font = `${fontSize}px ${font}`
   ctx.strokeText(string, x, y)
   ctx.fillText(string, x, y)
   ctx.restore()

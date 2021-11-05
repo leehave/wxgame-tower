@@ -43,3 +43,6 @@ export const moveDownMovement = 'MOVE_DOWN_MOVEMENT'
 
 export const homeIndexStart = 'HOME_INDEX_START'
 export const homeTopTitle = 'HOME_TOP_TITLE'
+
+export const gameEnd = 'GAME_END'
+export const gameEndPic = 'GAME_END_PIC'

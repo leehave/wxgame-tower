@@ -6,9 +6,30 @@ import {
   getCurrentTime
 } from '../util/util'
 export const homeStartTrigger = (instance, engine) => {
-  console.log('testssgjhdsjvbjf')
   engine.setVariable(constant.gameStartNow, true)
+  engine.start()
 }
+// 结束弹窗
+export const gameEndAction = (instance, engine) => {}
+export const gameEndPainter = (instance, engine) => {
+  const gameEndTag = engine.getVariable(constant.gameEnd)
+  if (!gameEndTag) return
+  const gameEndBg = engine.getImg('endBg')
+  const { ctx } = engine
+  ctx.rect(0,0,engine.width, engine.height)
+  ctx.fillRect(0,0,engine.width,engine.height)
+  ctx.fillStyle = 'RGBA(0,0,0,.5)'
+  ctx.save()
+  ctx.drawImage(
+    gameEndBg,
+    (engine.width - gameEndBg.width * 0.5)/2,
+    (engine.height - gameEndBg.height * 0.5)/2,
+    gameEndBg.width * 0.5,
+    gameEndBg.height * 0.5
+  )
+  ctx.restore()
+}
+
 export const homeStartAction = (instance, engine, time = 1000) => {
   const homeIndexHeight = engine.getVariable(constant.homeIndexStart)
   if (!instance.ready) {
@@ -16,10 +37,10 @@ export const homeStartAction = (instance, engine, time = 1000) => {
     instance.y = engine.ctx.canvas.height - homeIndexHeight + 20
     instance.ready = true
   }
-  
   const start = engine.getVariable(constant.gameStartNow)
   if(!start) return
   instance.visible = false
+  
   engine.getTimeMovement(
     constant.homeIndexStart,
     [
@@ -83,6 +104,14 @@ export const homeTopTitlePainter = (instance, engine) => {
   } = engine
   const homeTop = engine.getImg('main-index-title')
   const homeTopWidth = homeTop.width
+  // const rotateSpeed = engine.pixelsPerFrame(Math.PI * 4)
+  // instance.rotate += (rotateSpeed / 8) * -1
+  // instance.y += engine.pixelsPerFrame(engine.height * 0.7)
+  // instance.x += engine.pixelsPerFrame(engine.width * 0.3) * -1
+  // ctx.translate(instance.x, instance.y)
+  // ctx.rotate(instance.rotate)
+  // ctx.translate(-instance.x, -instance.y)
+  
   ctx.drawImage(
     homeTop,
     instance.x - (instance.x - (homeTopWidth * 0.5) / 2),

@@ -29,10 +29,6 @@ export default class Main {
 		let game = new TowerGame(option)
 		game.load(function(){
 			game.init()
-			
-      // setTimeout(() => {
-      //   game.start()
-      // }, 1500);
 		})
 
   }

@@ -32,6 +32,7 @@
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true,
+    "useStaticServer": false,
     "showES6CompileOption": false
   },
   "compileType": "game",
@@ -40,6 +41,9 @@
   "projectname": "tower-game",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
+  "staticServerOptions": {
+    "servePath": "fonts"
+  },
   "condition": {
     "search": {
       "list": []

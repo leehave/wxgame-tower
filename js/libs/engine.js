@@ -17,7 +17,7 @@ export default class Engine {
     this.calWidth = this.width * 0.5
     this.calHeight = this.height * 0.5
     // general
-    // this.debug = !!debug
+    this.debug = false
 		this.ctx = canvas.getContext('2d')
     this.defaultLayer = 'default'
     this.layerArr = [this.defaultLayer]
@@ -204,8 +204,8 @@ export default class Engine {
     this.paintAboveInstance()
     this.endAnimate(this, gameTime)
     this.tickTimeMovement()
-    // this.debug && this.showFps()
-    // this.debug && this.drawDebug()
+    this.debug && this.showFps()
+    this.debug && this.drawDebug()
     requestAnimationFrame((_time) => {
       this.animate.call(self, _time)
     })
