@@ -22,14 +22,28 @@ export const gameRestartAction = (instance, engine) => {
   const gameEndRestart = engine.getImg('restart')
   const gameEndBg = engine.getImg('endBg')
   const gameScore = engine.getImg('modal-over')
+  const gameRestartVerible = engine.getVariable(constant.restartBtn)
   if (!instance.ready) {
-    instance.x = gameEndRestart.width * 0.5
+    instance.x = engine.width - gameEndRestart.width * 0.5
     instance.y = (engine.height - gameEndBg.height * 0.5)/2 + (gameScore.height * 0.5)/2 + gameEndRestart.width * 0.5, gameEndRestart.width * 0.5 + 32
     instance.ready = true
   }
   const start = engine.getVariable(constant.gameStartNow)
   if(!start) return
   instance.visible = false
+  engine.getTimeMovement(
+    constant.restartBtn,
+    [
+      [instance.y, instance.y - gameEndRestart.height]
+    ],
+    (value) => {
+      instance.y = value
+    }, {
+      after: () => {
+        instance.y = gameEndRestart.height * -1.5
+      }
+    }
+  )
 }
 // 结束弹窗
 export const gameEndScorePainter = (instance, engine) => {
@@ -85,10 +99,10 @@ export const gameEndPainter = (instance, engine) => {
 }
 
 export const homeStartAction = (instance, engine) => {
-  const homeIndexHeight = engine.getVariable(constant.homeIndexStart)
+  const homeIndex = engine.getVariable(constant.homeIndexStart)
   if (!instance.ready) {
-    instance.x = engine.width / 2
-    instance.y = engine.ctx.canvas.height - homeIndexHeight + 20
+    instance.x = (engine.width - homeIndex)/2
+    instance.y = engine.height - homeIndex + 20
     instance.ready = true
   }
   const start = engine.getVariable(constant.gameStartNow)
@@ -98,13 +112,13 @@ export const homeStartAction = (instance, engine) => {
   engine.getTimeMovement(
     constant.homeIndexStart,
     [
-      [instance.y, instance.y - homeIndexHeight]
+      [instance.y, instance.y - homeIndex]
     ],
     (value) => {
       instance.y = value
     }, {
       after: () => {
-        instance.y = homeIndexHeight * -1.5
+        instance.y = homeIndex * -1.5
       }
     }
   )
@@ -118,7 +132,7 @@ export const homeStartPainter = (instance, engine) => {
   const homeIndexWidth = homeIndex.width
   instance.width = homeIndex.width
   instance.height = homeIndexHeight
-  ctx.drawImage(homeIndex, instance.x - (homeIndexWidth * 0.5 / 2), ctx.canvas.height - homeIndex.height + 20, homeIndex.width * 0.5, homeIndex.height * 0.5)
+  ctx.drawImage(homeIndex, (engine.width - homeIndexWidth * 0.5) / 2, engine.height - homeIndex.height + 20, homeIndex.width * 0.5, homeIndex.height * 0.5)
   ctx.restore()
 }
 // 顶部title

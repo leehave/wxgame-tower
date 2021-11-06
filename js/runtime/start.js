@@ -67,9 +67,9 @@ export const TowerGame = (option = {}) => {
 	game.setVariable(constant.gameScore, 0)
 	game.setVariable(constant.hardMode, false)
 	game.setVariable(constant.gameUserOption, option)
-	game.setVariable(constant.homeIndexStart, game.width * 0.4)
+	game.setVariable(constant.homeIndexStart, game.width * 0.5)
 	game.setVariable(constant.restartBtn, game.width * 0.5)
-	game.setVariable(constant.homeTopTitle, game.width * 0.4)
+	game.setVariable(constant.homeTopTitle, game.width * 0.5)
 	game.setVariable(constant.gameEndPic, game.width * 0.5)
 	for (let i = 1; i <= 4; i += 1) {
 		const cloud = new Instance({
