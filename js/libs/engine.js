@@ -91,7 +91,7 @@ export default class Engine {
     let calX = x
     let calY = y
     if (this.highResolution) {
-      calX *= 2
+      // calX *= 2
       // calY *= 2
     }
     this.instancesReactionArr.forEach((i) => {
