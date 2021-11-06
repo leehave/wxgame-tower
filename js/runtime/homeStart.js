@@ -24,7 +24,7 @@ export const gameRestartAction = (instance, engine) => {
   const gameScore = engine.getImg('modal-over')
   const gameRestartVerible = engine.getVariable(constant.restartBtn)
   if (!instance.ready) {
-    instance.x = engine.width - gameEndRestart.width * 0.5
+    instance.x = engine.width / 2 - (engine.width - gameEndRestart.width * 0.5)/2
     instance.y = (engine.height - gameEndBg.height * 0.5)/2 + (gameScore.height * 0.5)/2 + gameEndRestart.width * 0.5, gameEndRestart.width * 0.5 + 32
     instance.ready = true
   }
@@ -101,7 +101,7 @@ export const gameEndPainter = (instance, engine) => {
 export const homeStartAction = (instance, engine) => {
   const homeIndex = engine.getVariable(constant.homeIndexStart)
   if (!instance.ready) {
-    instance.x = (engine.width - homeIndex)/2
+    instance.x = (engine.width)/2 - (engine.width - homeIndex)/2
     instance.y = engine.height - homeIndex + 20
     instance.ready = true
   }
