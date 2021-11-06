@@ -6,12 +6,45 @@ import {
 import {
   getCurrentTime
 } from '../util/util'
-export const homeStartTrigger = (instance, engine) => {
+export const homeStartTrigger = (instance,engine) => {
   engine.setVariable(constant.gameStartNow, true)
   engine.start()
 }
+export const gameRestartTrigger = (instance, engine) => {
+  engine.setVariable(constant.gameEnd, false)
+
+  let start = engine.getVariable(constant.gameEnd)
+  if(start){
+    engine.restart()
+  }
+}
+export const gameRestartAction = (instance, engine) => {
+  const gameEndRestart = engine.getImg('restart')
+  const gameEndBg = engine.getImg('endBg')
+  const gameScore = engine.getImg('modal-over')
+  if (!instance.ready) {
+    instance.x = gameEndRestart.width * 0.5
+    instance.y = (engine.height - gameEndBg.height * 0.5)/2 + (gameScore.height * 0.5)/2 + gameEndRestart.width * 0.5, gameEndRestart.width * 0.5 + 32
+    instance.ready = true
+  }
+  const start = engine.getVariable(constant.gameStartNow)
+  if(!start) return
+  instance.visible = false
+}
 // 结束弹窗
-export const gameEndAction = (instance, engine) => {}
+export const gameEndScorePainter = (instance, engine) => {
+  const gameEndTag = engine.getVariable(constant.gameEnd)
+  if (!gameEndTag) return
+  const gameEndBg = engine.getImg('endBg')
+  const gameScore = engine.getImg('modal-over')
+  const gameEndRestart = engine.getImg('restart')
+  const { ctx } = engine
+  instance.width = gameEndRestart.width * 0.5
+  instance.height = gameEndRestart.height * 0.5
+  // ctx.save()
+  ctx.drawImage(gameEndRestart, (engine.width - gameEndRestart.width * 0.5)/2, (engine.height - gameEndBg.height * 0.5)/2 + (gameScore.height * 0.5)/2 + gameEndRestart.width * 0.5, gameEndRestart.width * 0.5, gameEndRestart.height * 0.5)
+  ctx.restore()
+}
 export const gameEndPainter = (instance, engine) => {
   const gameEndTag = engine.getVariable(constant.gameEnd)
   if (!gameEndTag) return
@@ -21,7 +54,7 @@ export const gameEndPainter = (instance, engine) => {
   ctx.rect(0,0,engine.width, engine.height)
   ctx.fillStyle = 'RGBA(0,0,0,.5)'
   ctx.fillRect(0,0,engine.width,engine.height)
-  ctx.restore()
+  // ctx.restore()
   ctx.drawImage(
     gameEndBg,
     (engine.width - gameEndBg.width * 0.5)/2,
@@ -29,28 +62,29 @@ export const gameEndPainter = (instance, engine) => {
     gameEndBg.width * 0.5,
     gameEndBg.height * 0.5
   )
-  ctx.save()
+  // ctx.save()
   ctx.drawImage(gameScore, (engine.width - gameScore.width * 0.5)/2,
-  gameScore.height * 0.5,
+  (engine.height - gameEndBg.height * 0.5)/2 + (gameScore.height * 0.5)/2,
   gameScore.width * 0.5,
   gameScore.height * 0.5)
   drawYellowString(engine, {
-    string: '100',
+    string: engine.getVariable(constant.gameScore),
     size: 36,
-    x: (engine.width - gameScore.width * 0.5) / 2 + 36,
-    y: (engine.height - gameEndBg.height * 0.5) + gameScore.height * 0.5
+    textAlign: 'center',
+    x: engine.width/ 2,
+    y: (engine.height - gameEndBg.height * 0.5) / 2 + gameScore.height
   })
   const font = 'Microsoft Yahei'
   ctx.fillStyle = '#ff0000'
   ctx.strokeStyle = '#ff0000'
-  ctx.textAlign = 'center'
   ctx.font = `18px ${font}`
-  ctx.fillText('再来一次', (gameEndBg.width * 0.5 - gameScore.width * 0.5) / 2, (engine.height - gameEndBg.height * 0.5) + gameScore.height * 0.5 + 14)
+  ctx.textAlign = 'center'
+  ctx.fillText('再来一次', engine.width / 2, (engine.height - gameEndBg.height * 0.5) / 2 + gameScore.height + 32)
   
   ctx.restore()
 }
 
-export const homeStartAction = (instance, engine, time = 1000) => {
+export const homeStartAction = (instance, engine) => {
   const homeIndexHeight = engine.getVariable(constant.homeIndexStart)
   if (!instance.ready) {
     instance.x = engine.width / 2

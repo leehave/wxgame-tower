@@ -12,7 +12,9 @@ import {
 	homeTopTitlePainter, 
 	homeStartTrigger,
 	gameEndPainter,
-	gameEndAction
+	gameEndScorePainter,
+	gameRestartTrigger,
+	gameRestartAction
 } from './homeStart'
 import { tutorialAction, tutorialPainter } from './tutorial'
 import * as constant from './constant'
@@ -66,6 +68,7 @@ export const TowerGame = (option = {}) => {
 	game.setVariable(constant.hardMode, false)
 	game.setVariable(constant.gameUserOption, option)
 	game.setVariable(constant.homeIndexStart, game.width * 0.4)
+	game.setVariable(constant.restartBtn, game.width * 0.5)
 	game.setVariable(constant.homeTopTitle, game.width * 0.4)
 	game.setVariable(constant.gameEndPic, game.width * 0.5)
 	for (let i = 1; i <= 4; i += 1) {
@@ -106,8 +109,6 @@ export const TowerGame = (option = {}) => {
 		painter: homeTopTitlePainter
 	})
 	game.addInstance(title)
-
-	
 	game.touchStartListener = () => {
 		touchEventHandler(game)
 	}
@@ -115,11 +116,26 @@ export const TowerGame = (option = {}) => {
 	game.stop = () => {
 		const gameEnd = new Instance({
 			name: 'gameEnd',
-			action: gameEndAction,
 			painter: gameEndPainter
 		})
 		game.addInstance(gameEnd)
+		const restart = new Instance({
+			name: 'gameRestart',
+			painter: gameEndScorePainter,
+			trigger: gameRestartTrigger,
+			action: gameRestartAction
+		})
+		game.addInstance(restart)
 	},
+	game.restart = () => {
+		game.setVariable(constant.gameEnd, false)
+		game.setVariable(constant.blockCount, 0)
+    game.setVariable(constant.successCount, 0)
+    game.setVariable(constant.failedCount, 0)
+    game.setVariable(constant.gameScore, 0)
+		game.setVariable(constant.hardMode, false)
+		game.init()
+	}
 	game.start = () => {
 		const tutorial = new Instance({
 			name: 'tutorial',

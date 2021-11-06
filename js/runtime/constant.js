@@ -46,3 +46,4 @@ export const homeTopTitle = 'HOME_TOP_TITLE'
 
 export const gameEnd = 'GAME_END'
 export const gameEndPic = 'GAME_END_PIC'
+export const restartBtn = 'RESTART_BTN'
