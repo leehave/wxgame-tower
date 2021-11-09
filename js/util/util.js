@@ -6,7 +6,7 @@ console.log(res, 'res.platform')
 const plarform = res.platform
 export const checkMoveDown = engine =>
   (engine.checkTimeMovement(constant.moveDownMovement))
-
+export const pixelRatio = res.pixelRatio
 export const getMoveDownValue = (engine, store) => {
   const pixelsPerFrame = store ? store.pixelsPerFrame : engine.pixelsPerFrame.bind(engine)
   const successCount = engine.getVariable(constant.successCount)
@@ -182,7 +182,7 @@ export const drawYellowString = (engine, option) => {
   ctx.restore()
 }
 const performance = wx.getPerformance()
-export const getCurrentTime = () => (performance.now())
+export const getCurrentTime = () => (new Date().getTime())
 
 export const random = (min, max) => (Math.random() * (max - min)) + min
 

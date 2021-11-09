@@ -1,7 +1,7 @@
 import * as utils from '../util/util'
 import Tween from '../util/tween'
 
-const { isFunction, isTouchDevice } = utils
+const { isFunction, isTouchDevice, pixelRatio } = utils
 const res = wx.getSystemInfoSync()
 export default class Engine {
   constructor(option = {}) {
@@ -90,8 +90,8 @@ export default class Engine {
   triggerReaction(x, y) {
     let calX = x
     let calY = y
-    if (this.highResolution) {
-      // calX *= 2
+    if (this.highResolution && pixelRatio > 2) {
+      // calX *= 1.5
       // calY *= 2
     }
     this.instancesReactionArr.forEach((i) => {

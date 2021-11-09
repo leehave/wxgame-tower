@@ -71,6 +71,7 @@ export const TowerGame = (option = {}) => {
 	game.setVariable(constant.restartBtn, game.width * 0.5)
 	game.setVariable(constant.homeTopTitle, game.width * 0.5)
 	game.setVariable(constant.gameEndPic, game.width * 0.5)
+	game.setVariable(constant.homeTitleState, constant.homeTitleStateMap.ready)
 	for (let i = 1; i <= 4; i += 1) {
 		const cloud = new Instance({
 			name: `cloud_${i}`,

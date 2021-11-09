@@ -6,6 +6,14 @@ import {
 import {
   getCurrentTime
 } from '../util/util'
+
+const {
+  homeTitleState: HOME_TITLE_STATE,
+  homeTitleStateMap
+} = constant
+
+const HOME_TITLE_ANIMATE = 'HOME_TITLE_ANIMATE'
+
 export const homeStartTrigger = (instance,engine) => {
   engine.setVariable(constant.gameStartNow, true)
   engine.start()
@@ -100,6 +108,7 @@ export const gameEndPainter = (instance, engine) => {
 
 export const homeStartAction = (instance, engine) => {
   const homeIndex = engine.getVariable(constant.homeIndexStart)
+  const gameStartBtn = engine.getImg('homeStart')
   if (!instance.ready) {
     instance.x = (engine.width)/2 - (engine.width - homeIndex)/2
     instance.y = engine.height - homeIndex + 20
@@ -140,18 +149,35 @@ export const homeTopTitleAction = (instance, engine) => {
   const homeIndexHeight = engine.getVariable(constant.homeTopTitle)
   instance.x = engine.width / 2
   instance.y = homeIndexHeight * -1.5
+  const homeTitleState = engine.getVariable(HOME_TITLE_STATE)
+  const homeTop = engine.getImg('main-index-title')
+  const homeTopWidth = homeTop.width
+  instance.x = engine.width / 2 - (homeTopWidth * 0.5) / 2
+  instance.y = 0
+  if (homeTitleState === homeTitleStateMap.ready) {
+    engine.setTimeMovement(HOME_TITLE_ANIMATE, 2000)
+    engine.setVariable(HOME_TITLE_STATE, homeTitleStateMap.left)
+    instance.rotation = 0
+    instance.direction = -1
+  } else if(!engine.checkTimeMovement(HOME_TITLE_ANIMATE)) {
+    engine.setTimeMovement(HOME_TITLE_ANIMATE, 2000)
+    if( homeTitleState === homeTitleStateMap.left) {
+      instance.direction = 1
+      engine.setVariable(HOME_TITLE_STATE,  homeTitleStateMap.right)
+    }else {
+      instance.direction = -1
+      engine.setVariable(HOME_TITLE_STATE, homeTitleStateMap.left)
+    }
+  }
   instance.ready = true
   engine.getTimeMovement(
-    constant.homeTopTitle,
-    [
-      [instance.y, instance.y - homeIndexHeight]
-    ],
-    (value) => {
-      instance.y = value
-    }, {
-      after: () => {
-        instance.y = homeIndexHeight * -1.5
-      }
+    HOME_TITLE_ANIMATE,
+    [[instance.rotation, Math.PI / 180 * 5 * instance.direction]],
+    (angle) =>  {
+      instance.rotation = angle
+    },
+    {
+      easing: 'easeInOut'
     }
   )
   const start = engine.getVariable(constant.gameStartNow)
@@ -164,8 +190,8 @@ function drawLine(engine, x, y){
   const kmp = 30
   let lastTime = getCurrentTime()
   let now = new Date().getTime() * 1.2,
-    		deltaTime = now - lastTime
-        lastTime = now
+    deltaTime = now - lastTime
+    lastTime = now
 
   let a = 0
   a += deltaTime * 0.01
@@ -175,7 +201,7 @@ function drawLine(engine, x, y){
   ctx.lineCap = "round"
   ctx.strokeStyle = "rgba(255,255,255,1)"
   ctx.moveTo(x, y)
-  ctx.quadraticCurveTo(x, y-30, x + r * kmp, y - 120)
+  ctx.quadraticCurveTo(x, y - 30, x + r * kmp, y - 120)
   ctx.stroke()
   ctx.restore()
 }
@@ -185,18 +211,14 @@ export const homeTopTitlePainter = (instance, engine) => {
   } = engine
   const homeTop = engine.getImg('main-index-title')
   const homeTopWidth = homeTop.width
-  // const rotateSpeed = engine.pixelsPerFrame(Math.PI * 4)
-  // instance.rotate += (rotateSpeed / 8) * -1
-  // instance.y += engine.pixelsPerFrame(engine.height * 0.7)
-  // instance.x += engine.pixelsPerFrame(engine.width * 0.3) * -1
-  // ctx.translate(instance.x, instance.y)
-  // ctx.rotate(instance.rotate)
-  // ctx.translate(-instance.x, -instance.y)
-  
+  ctx.save()
+  ctx.translate(engine.width/2, 0)
+  ctx.rotate(instance.rotation)
+  ctx.translate(-engine.width/2, 0)
   ctx.drawImage(
     homeTop,
-    instance.x - (instance.x - (homeTopWidth * 0.5) / 2),
-    0,
+    instance.x,
+    instance.y,
     homeTopWidth * 0.5,
     homeTop.height * 0.5
   )

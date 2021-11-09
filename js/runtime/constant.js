@@ -47,3 +47,11 @@ export const homeTopTitle = 'HOME_TOP_TITLE'
 export const gameEnd = 'GAME_END'
 export const gameEndPic = 'GAME_END_PIC'
 export const restartBtn = 'RESTART_BTN'
+export const homeTitleState = 'HOME_TITLE_STATE'
+
+export const homeTitleStateMap = {
+  ready: 'GAME_READY',
+  begin: 'GAME_BEGIN',
+  left: 'ROUTE_LEFT',
+  right: 'ROUTE_RIGHT',
+}
