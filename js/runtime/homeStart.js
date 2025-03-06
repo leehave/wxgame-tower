@@ -1,8 +1,10 @@
 import * as constant from './constant'
+
 import {
-  getSwingBlockVelocity,
-  drawYellowString
+  drawYellowString,
+  getSwingBlockVelocity
 } from '../util/util'
+
 import {
   getCurrentTime
 } from '../util/util'
@@ -19,12 +21,12 @@ export const homeStartTrigger = (instance,engine) => {
   engine.start()
 }
 export const gameRestartTrigger = (instance, engine) => {
-  engine.setVariable(constant.gameEnd, false)
-
-  let start = engine.getVariable(constant.gameEnd)
-  if(start){
-    engine.restart()
-  }
+  // 移除重启按钮实例
+  engine.removeInstance('gameRestart')
+  engine.removeInstance('gameEnd')
+  
+  // 重启游戏
+  engine.restart()
 }
 export const gameRestartAction = (instance, engine) => {
   const gameEndRestart = engine.getImg('restart')
@@ -150,7 +152,10 @@ export const homeTopTitleAction = (instance, engine) => {
   instance.x = engine.width / 2
   instance.y = homeIndexHeight * -1.5
   const homeTitleState = engine.getVariable(HOME_TITLE_STATE)
+  
   const homeTop = engine.getImg('main-index-title')
+  // 添加资源检查
+  if (!homeTop) return
   const homeTopWidth = homeTop.width
   instance.x = engine.width / 2 - (homeTopWidth * 0.5) / 2
   instance.y = 0
@@ -210,6 +215,8 @@ export const homeTopTitlePainter = (instance, engine) => {
     ctx
   } = engine
   const homeTop = engine.getImg('main-index-title')
+  // 添加资源检查
+  if (!homeTop) return
   const homeTopWidth = homeTop.width
   ctx.save()
   ctx.translate(engine.width/2, 0)

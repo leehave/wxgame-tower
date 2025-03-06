@@ -38,27 +38,21 @@
     "useCompilerPlugins": false
   },
   "compileType": "game",
-  "libVersion": "1.9.94",
-  "appid": "wx7508f46af772291c",
+  "libVersion": "3.5.6",
+  "appid": "wx2a8d5c72b9ae7606",
   "projectname": "tower-game",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "staticServerOptions": {
     "servePath": "fonts"
   },
-  "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
-    "game": {
-      "currentL": -1,
-      "list": []
-    },
-    "miniprogram": {
-      "list": []
-    }
+  "condition": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }

@@ -1,32 +1,35 @@
-import Engine from '../libs/engine.js'
-import Instance from '../libs/instance.js'
-import { touchEventHandler } from '../util/util'
-import { background } from './background'
-import { lineAction, linePainter } from './line'
+import * as constant from './constant'
+
 import { cloudAction, cloudPainter } from './cloud'
-import { hookAction, hookPainter } from './hooks'
-import { 
-	homeStartAction, 
-	homeStartPainter,
-	homeTopTitleAction,
-	homeTopTitlePainter, 
-	homeStartTrigger,
+import { endAnimate, startAnimate } from './animateFunc'
+import {
 	gameEndPainter,
 	gameEndScorePainter,
+	gameRestartAction,
 	gameRestartTrigger,
-	gameRestartAction
+	homeStartAction,
+	homeStartPainter,
+	homeStartTrigger,
+	homeTopTitleAction,
+	homeTopTitlePainter
 } from './homeStart'
+import { hookAction, hookPainter } from './hooks'
+import { lineAction, linePainter } from './line'
 import { tutorialAction, tutorialPainter } from './tutorial'
-import * as constant from './constant'
-import { startAnimate, endAnimate } from './animateFunc'
+
+import Engine from '../libs/engine.js'
+import Instance from '../libs/instance.js'
+import { background } from './background'
+import { touchEventHandler } from '../util/util'
 
 export const TowerGame = (option = {}) => {
-	const {
-		canvas,
-		width,
-		height,
-		soundOn
-	} = option
+  const {
+    canvas,
+    width,
+    height,
+    soundOn,
+    onRestart
+  } = option
 	const game = new Engine({
 		canvas:canvas,
 		width,
@@ -128,15 +131,74 @@ export const TowerGame = (option = {}) => {
 		})
 		game.addInstance(restart)
 	},
-	game.restart = () => {
-		game.setVariable(constant.gameEnd, false)
-		game.setVariable(constant.blockCount, 0)
+  game.restart = () => {
+    console.log(' game.restart = () => {');
+    // 重置游戏状态
+    game.setVariable(constant.gameEnd, false)
+    game.setVariable(constant.blockCount, 0)
     game.setVariable(constant.successCount, 0)
     game.setVariable(constant.failedCount, 0)
     game.setVariable(constant.gameScore, 0)
-		game.setVariable(constant.hardMode, false)
-		game.init()
-	}
+    game.setVariable(constant.hardMode, false)
+    game.setVariable(constant.gameStartNow, false)
+    
+    // 重置背景相关变量
+    game.setVariable(constant.bgImgOffset, 0)
+    game.setVariable(constant.lineInitialOffset, 0)
+    game.setVariable(constant.bgLinearGradientOffset, 0)
+    
+    // 确保资源加载完成后再重建实例
+    if (game.assetsObj.image['main-index-title']) {
+      // 清理所有实例
+      game.layerArr.forEach(layer => {
+        game.instancesObj[layer] = []
+      })
+      game.instancesReactionArr = []
+      
+      // 重新初始化基础实例
+      for (let i = 1; i <= 4; i += 1) {
+        const cloud = new Instance({
+          name: `cloud_${i}`,
+          action: cloudAction,
+          painter: cloudPainter
+        })
+        cloud.index = i
+        cloud.count = 5 - i
+        game.addInstance(cloud)
+      }
+  
+      const line = new Instance({
+        name: 'line',
+        action: lineAction,
+        painter: linePainter
+      })
+      game.addInstance(line)
+  
+      const hook = new Instance({
+        name: 'hook',
+        action: hookAction,
+        painter: hookPainter
+      })
+      game.addInstance(hook)
+  
+      const start = new Instance({
+        name: 'homeStart',
+        action: homeStartAction,
+        painter: homeStartPainter,
+        trigger: homeStartTrigger
+      })
+      game.addInstance(start)
+  
+      const title = new Instance({
+        name: 'homeTop',
+        action: homeTopTitleAction,
+        painter: homeTopTitlePainter
+      })
+      game.addInstance(title)
+    }
+  }
+  
+	game.init()
 	game.start = () => {
 		const tutorial = new Instance({
 			name: 'tutorial',
@@ -149,7 +211,6 @@ export const TowerGame = (option = {}) => {
 			action: tutorialAction,
 			painter: tutorialPainter
 		})
-		game.addInstance(tutorialArrow)
 		game.setTimeMovement(constant.bgInitMovement, 800)
 		game.setTimeMovement(constant.tutorialMovement, 300)
 		game.setVariable(constant.gameStartNow, true)
